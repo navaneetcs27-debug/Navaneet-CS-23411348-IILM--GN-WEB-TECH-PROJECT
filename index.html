@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Traffic Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<!-- 🔥 TOGGLE BUTTON (always visible) -->
+<button class="toggle-btn" onclick="toggleMenu()">☰</button>
+
+<!-- 🔥 SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <h2>🚦 Traffic AI</h2>
+
+    <button onclick="showSection('dashboard')">📊 Dashboard</button>
+    <button onclick="showSection('map-section')">🗺️ Map</button>
+    <button onclick="showSection('cctv-section')">🎥 CCTV</button>
+    <button onclick="showSection('challan-section')">🚔 Challan</button>
+    <button onclick="showSection('alerts-section')">🚨 Alerts</button>
+
+    <hr>
+    <button onclick="toggleMode()" id="modeBtn">🌙 Mode</button>
+    <button onclick="logout()">🚪 Logout</button>
+</div>
+
+<!-- 🔥 MAIN -->
+<div class="main">
+
+    <h1>🚦 Smart Traffic Dashboard</h1>
+    <h3 id="user-role"></h3>
+
+    <!-- 📊 DASHBOARD -->
+    <div id="dashboard" class="section">
+
+        <div class="card">
+            <h2>🚦 Traffic Signal</h2>
+            <div class="traffic-light">
+                <div id="red" class="light red"></div>
+                <div id="yellow" class="light yellow"></div>
+                <div id="green" class="light green"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Traffic Analysis</h2>
+            <canvas id="trafficChart"></canvas>
+        </div>
+
+        <div class="card">
+            <h2>🚧 Road Status</h2>
+            <div id="roads-data"></div>
+        </div>
+
+        <h2 id="status"></h2>
+
+    </div>
+
+    <!-- 🗺️ MAP -->
+    <div id="map-section" class="section" style="display:none;">
+        <div class="card">
+            <h2>🗺️ Traffic Map</h2>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- 🎥 CCTV -->
+    <div id="cctv-section" class="section" style="display:none;">
+        <div class="card">
+            <h2>🎥 Live CCTV</h2>
+            <p style="color:red;">🔴 LIVE Monitoring</p>
+
+            <video width="500" autoplay muted loop controls>
+                <source src="videos/road1.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- 🚔 CHALLAN -->
+    <div id="challan-section" class="section" style="display:none;">
+        <div class="card">
+            <h2>🚔 E-Challan System</h2>
+
+            <button class="btn" onclick="generateChallan()">Generate Challan</button>
+            <button class="btn" onclick="downloadChallanPDF()">Download PDF</button>
+
+            <div id="challan-box"></div>
+        </div>
+    </div>
+
+    <!-- 🚨 ALERTS -->
+    <div id="alerts-section" class="section" style="display:none;">
+        <div class="card">
+            <h2>📡 Alerts Panel</h2>
+            <div id="alerts-panel"></div>
+        </div>
+    </div>
+
+    <!-- 🚑 EMERGENCY -->
+    <div class="card">
+        <h2>🚑 Emergency Control</h2>
+        <button class="btn emergency-btn" onclick="activateEmergency('Ambulance')">🚑 Ambulance</button>
+        <button class="btn emergency-btn" onclick="activateEmergency('Police')">🚓 Police</button>
+    </div>
+
+</div>
+
+
+<!-- Libraries -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
+
+
+

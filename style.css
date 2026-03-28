@@ -1,0 +1,248 @@
+/* 🌌 BODY (PREMIUM BACKGROUND) */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    background: linear-gradient(135deg, #020111 0%, #3a3a52 50%, #2a2a72 100%);
+    background-size: 400% 400%;
+    animation: gradientBG 18s ease infinite;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 25% 25%, rgba(120, 245, 255, 0.25), rgba(7, 20, 35, 0.8) 60%);
+    pointer-events: none;
+    z-index: -1;
+    mix-blend-mode: overlay;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 0%;}
+    50% {background-position: 100% 100%;}
+    100% {background-position: 0% 0%;}
+}
+
+/* 🔥 Animated Background */
+body::before {
+    content: "";
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, #ff4d4d, #4CAF50, #2196F3, #ff4d4d);
+    animation: moveBg 10s linear infinite;
+    opacity: 0.08;
+    z-index: -1;
+}
+
+@keyframes moveBg {
+    0% { transform: translate(0,0); }
+    100% { transform: translate(-50%, -50%); }
+}
+
+/* � TOGGLE BUTTON */
+.toggle-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: #111;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.toggle-btn:hover {
+    background: #4CAF50;
+    box-shadow: 0 0 10px #4CAF50;
+}
+
+/* �📂 SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: #111;
+    padding: 20px;
+    transition: width 0.3s ease;
+    overflow: hidden;    box-shadow: 2px 0 10px rgba(0,0,0,0.5);}
+
+/* Sidebar collapsed */
+.sidebar.collapsed {
+    width: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+/* Hide text when collapsed */
+.sidebar.collapsed h2,
+.sidebar.collapsed button:not(:first-child) {
+    font-size: 0;
+    padding: 10px;
+}
+
+/* Sidebar buttons */
+.sidebar button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar button:hover {
+    background: #4CAF50;
+    box-shadow: 0 0 10px #4CAF50;
+}
+
+/* 🧱 MAIN CONTENT */
+.main {
+    margin-left: 220px;
+    padding: 20px;
+    width: calc(100% - 220px);
+    transition: 0.3s;
+}
+
+/* Adjust when sidebar collapsed */
+.sidebar.collapsed ~ .main {
+    margin-left: 0;
+    width: 100%;
+}
+
+/* 📦 GRID LAYOUT */
+.section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* 🧊 CARDS */
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 15px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* 🔘 BUTTONS */
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    background: #222;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #4CAF50;
+    box-shadow: 0 0 10px #4CAF50;
+}
+
+/* 🚑 Emergency */
+.emergency-btn {
+    background: red;
+}
+
+/* 🚦 TRAFFIC LIGHT */
+.traffic-light {
+    width: 80px;
+    background: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.light {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 10px auto;
+    opacity: 0.3;
+}
+
+.red { background: red; }
+.yellow { background: yellow; }
+.green { background: green; }
+
+/* 🔥 ACTIVE GLOW */
+.active-red {
+    opacity: 1 !important;
+    box-shadow: 0 0 20px red, 0 0 40px red;
+}
+.active-yellow {
+    opacity: 1 !important;
+    box-shadow: 0 0 20px yellow, 0 0 40px yellow;
+}
+.active-green {
+    opacity: 1 !important;
+    box-shadow: 0 0 20px lime, 0 0 40px lime;
+}
+
+/* 🗺️ MAP */
+#map {
+    height: 400px;
+    border-radius: 10px;
+}
+
+/* Car markers */
+.car-marker {
+    font-size: 24px;
+    text-align: center;
+    line-height: 30px;
+}
+
+/* 🚨 ALERTS */
+.alert {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.alert-danger { background: red; }
+.alert-warning { background: orange; }
+.alert-info { background: blue; }
+
+/* 🌙 DARK MODE */
+.dark {
+    background: #000 !important;
+}
+
+.dark .card {
+    background: rgba(0,0,0,0.6);
+}
+
+.dark .sidebar {
+    background: #000;
+}
+
+.dark button {
+    background: #333;
+}
+
+/* ✨ FADE ANIMATION */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px);}
+    to { opacity: 1; transform: translateY(0);}
+}

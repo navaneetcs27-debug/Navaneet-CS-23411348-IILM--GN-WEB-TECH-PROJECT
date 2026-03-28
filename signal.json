@@ -1,0 +1,11 @@
+{
+    "roads": {
+        "Road1": 1998,
+        "Road2": 0,
+        "Road3": 0,
+        "Road4": 0
+    },
+    "green_road": "Road1",
+    "emergency": true,
+    "type": "Ambulance"
+}

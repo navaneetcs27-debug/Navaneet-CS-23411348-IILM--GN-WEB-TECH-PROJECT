@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Traffic Dashboard</title>
+    <meta name="description" content="Smart Traffic Management System dashboard with traffic signal monitoring, route analysis, map view, CCTV preview, alerts, and challan tools.">
     <link rel="stylesheet" href="style.css">
+    <script>
+        if (window.location.protocol === 'file:' || ['127.0.0.1', 'localhost'].includes(window.location.hostname)) {
+            window.location.replace('http://127.0.0.1:5000/index.html');
+        }
+    </script>
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
@@ -116,7 +124,7 @@
 <!-- Libraries -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="script.js"></script>
+<script src="app.js?v=3"></script>
 
 </body>
 </html>

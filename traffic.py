@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
@@ -6,10 +6,15 @@ import cv2
 import os
 import numpy as np
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, static_folder=BASE_DIR, static_url_path='')
 CORS(app)
 
-DB_PATH = 'traffic.db'
+DB_PATH = os.path.join(BASE_DIR, 'traffic.db')
+
+
+def project_path(*parts):
+    return os.path.join(BASE_DIR, *parts)
 
 
 # ================= DATABASE =================
@@ -41,10 +46,16 @@ def init_db():
     conn.close()
 
 
+init_db()
+
+
 # ================= AUTH APIs =================
-@app.route('/api/register', methods=['POST'])
+@app.route('/api/register', methods=['GET', 'POST'])
 def register():
-    data = request.get_json()
+    if request.method == 'GET':
+        return jsonify({'success': True, 'message': 'Use POST to register a user'})
+
+    data = request.get_json(silent=True) or {}
 
     username = data.get('username')
     password = data.get('password')
@@ -67,9 +78,12 @@ def register():
     return jsonify({'success': True})
 
 
-@app.route('/api/login', methods=['POST'])
+@app.route('/api/login', methods=['GET', 'POST'])
 def login():
-    data = request.get_json()
+    if request.method == 'GET':
+        return jsonify({'success': True, 'message': 'Use POST to log in'})
+
+    data = request.get_json(silent=True) or {}
 
     username = data.get('username')
     password = data.get('password')
@@ -120,7 +134,7 @@ def count_vehicles(video_path):
 
 
 # ================= YOLO DETECTION =================
-YOLO_DIR = 'yolo'
+YOLO_DIR = os.path.join(BASE_DIR, 'yolo')
 YOLO_CFG = os.path.join(YOLO_DIR, 'yolov3.cfg')
 YOLO_WEIGHTS = os.path.join(YOLO_DIR, 'yolov3.weights')
 YOLO_NAMES = os.path.join(YOLO_DIR, 'coco.names')
@@ -226,10 +240,10 @@ def yolo_detect_route():
 @app.route('/api/traffic', methods=['GET'])
 def traffic():
     roads = {
-        "Road1": count_vehicles("videos/road1.mp4"),
-        "Road2": count_vehicles("videos/road2.mp4"),
-        "Road3": count_vehicles("videos/road3.mp4"),
-        "Road4": count_vehicles("videos/road4.mp4")
+        "Road1": count_vehicles(project_path("videos", "road1.mp4")),
+        "Road2": count_vehicles(project_path("videos", "road2.mp4")),
+        "Road3": count_vehicles(project_path("videos", "road3.mp4")),
+        "Road4": count_vehicles(project_path("videos", "road4.mp4"))
     }
 
     # Find highest traffic
@@ -255,7 +269,49 @@ def traffic():
     })
 
 
+@app.route('/')
+def home():
+    return send_from_directory(BASE_DIR, 'site_login.html')
+
+
+@app.route('/login.html')
+def login_page():
+    return send_from_directory(BASE_DIR, 'site_login.html')
+
+
+@app.route('/index.html')
+def dashboard_page():
+    return send_from_directory(BASE_DIR, 'site_index.html')
+
+
+@app.route('/healthz')
+def healthz():
+    return jsonify({'ok': True})
+
+
+@app.errorhandler(404)
+def not_found(error):
+    if request.path.startswith('/api/'):
+        return jsonify({'success': False, 'message': 'API route not found'}), 404
+    return error
+
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    if request.path.startswith('/api/'):
+        return jsonify({'success': False, 'message': 'Method not allowed'}), 405
+    return error
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    if request.path.startswith('/api/'):
+        return jsonify({'success': False, 'message': 'Internal server error'}), 500
+    return error
+
+
 # ================= RUN APP =================
 if __name__ == '__main__':
     init_db()
-    app.run(host='0.0.0.0', port=5000, debug=False)  # production-like server (no Flask debug mode)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)

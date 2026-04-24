@@ -3,6 +3,9 @@ if (localStorage.getItem("loggedIn") !== "true") {
     window.location.href = "login.html";
 }
 // 🔊 VOICE ALERT
+const API_BASE = window.location.protocol === "file:"
+    ? "http://127.0.0.1:5000/api"
+    : `${window.location.origin}/api`;
 function speakAlert(message) {
     let speech = new SpeechSynthesisUtterance(message);
     window.speechSynthesis.speak(speech);
@@ -286,6 +289,52 @@ function refreshData() {
 }
 
 // 🚀 START
+function getFallbackTrafficData() {
+    return {
+        "roads": {
+            "Road1": 25,
+            "Road2": 15,
+            "Road3": 35,
+            "Road4": 10
+        },
+        "green_road": "Road3",
+        "emergency": false,
+        "type": null
+    };
+}
+
+function applyTrafficData(data, modeLabel) {
+    displayRoads(data);
+    loadMap(data);
+    loadChart(data);
+    checkTrafficAlert(data);
+    updateStatus("ðŸš¦ Green Signal â†’ " + data.green_road);
+    addAlert(`ðŸ“Š Data loaded (${modeLabel})`, "info");
+
+    setSignal("red");
+    setTimeout(() => setSignal("yellow"), 1000);
+    setTimeout(() => setSignal("green"), 2000);
+
+    if (Math.random() > 0.7) {
+        generateChallan();
+    }
+}
+
+function refreshData() {
+    fetch(`${API_BASE}/traffic`)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`Traffic API failed with status ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => applyTrafficData(data, "live mode"))
+        .catch(error => {
+            console.warn("Traffic API unavailable, using fallback data:", error);
+            applyTrafficData(getFallbackTrafficData(), "static mode");
+        });
+}
+
 window.onload = function () {
 
     // 🔐 Check login FIRST
@@ -295,8 +344,8 @@ window.onload = function () {
     }
 
     // 👤 Show user info
-    let role = localStorage.getItem("role");
-    let user = localStorage.getItem("username");
+    let role = localStorage.getItem("role") || "user";
+    let user = localStorage.getItem("username") || "guest";
 
     if (document.getElementById("user-role")) {
         document.getElementById("user-role").innerText =
@@ -307,6 +356,11 @@ window.onload = function () {
     if (role === "officer") {
         let box = document.getElementById("challan-box");
         if (box) box.style.display = "none";
+    }
+
+    // 🌙 Mode persistence
+    if (localStorage.getItem("mode") === "dark") {
+        document.body.classList.add("dark");
     }
 
     // 🚀 Start system
@@ -325,11 +379,6 @@ function logout() {
     alert("Logged out successfully");
     window.location.href = "login.html";
 }
-// 🚀 START
-window.onload = function () {
-    refreshData();
-    setInterval(refreshData, 5000);
-};
 
 // 👉 ADD HERE 👇
 function showSection(id) {
@@ -371,12 +420,17 @@ window.addEventListener("DOMContentLoaded", function () {
     let toggleBtn = document.getElementById("menuToggle");
     let sidebar = document.querySelector(".sidebar");
 
-    toggleBtn.addEventListener("click", function () {
-        sidebar.classList.toggle("collapsed");
-    });
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener("click", function () {
+            sidebar.classList.toggle("collapsed");
+        });
+    }
 
 });
 function toggleMenu() {
     let sidebar = document.getElementById("sidebar");
     sidebar.classList.toggle("collapsed");
 }
+const API_BASE = window.location.protocol === "file:"
+    ? "http://127.0.0.1:5000/api"
+    : `${window.location.origin}/api`;

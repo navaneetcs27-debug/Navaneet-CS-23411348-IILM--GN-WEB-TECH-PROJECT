@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Traffic Dashboard</title>
+    <meta name="description" content="Smart Traffic Management System dashboard.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <script>
+        if (window.location.protocol === "file:" || ["127.0.0.1", "localhost"].includes(window.location.hostname)) {
+            if (window.location.port !== "5000") {
+                window.location.replace("http://127.0.0.1:5000/index.html");
+            }
+        }
+    </script>
+</head>
+<body>
+    <button type="button" class="toggle-btn" onclick="toggleMenu()">Menu</button>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Traffic AI</h2>
+        <button type="button" onclick="showSection('dashboard')">Dashboard</button>
+        <button type="button" onclick="showSection('map-section')">Map</button>
+        <button type="button" onclick="showSection('cctv-section')">CCTV</button>
+        <button type="button" onclick="showSection('challan-section')">Challan</button>
+        <button type="button" onclick="showSection('alerts-section')">Alerts</button>
+        <hr>
+        <button type="button" id="modeBtn" onclick="toggleMode()">Mode</button>
+        <button type="button" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="main">
+        <h1>Smart Traffic Dashboard</h1>
+        <h3 id="user-role"></h3>
+
+        <div id="dashboard" class="section">
+            <div class="card">
+                <h2>Traffic Signal</h2>
+                <div class="traffic-light">
+                    <div id="red" class="light red"></div>
+                    <div id="yellow" class="light yellow"></div>
+                    <div id="green" class="light green"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Traffic Analysis</h2>
+                <canvas id="trafficChart"></canvas>
+            </div>
+
+            <div class="card">
+                <h2>Road Status</h2>
+                <div id="roads-data"></div>
+            </div>
+
+            <h2 id="status"></h2>
+        </div>
+
+        <div id="map-section" class="section map-layout" style="display:none;">
+            <div class="card map-stage-card">
+                <div class="map-stage-header">
+                    <div>
+                        <p class="eyebrow">Live network view</p>
+                        <h2>City traffic map</h2>
+                    </div>
+                    <div class="map-pulse">
+                        <span class="pulse-dot"></span>
+                        <span>All roads active</span>
+                    </div>
+                </div>
+                <div id="map"></div>
+                <div class="map-overlay">
+                    <div class="map-stat">
+                        <span class="map-stat-label">Priority road</span>
+                        <strong id="map-green-road">Road 3</strong>
+                    </div>
+                    <div class="map-stat">
+                        <span class="map-stat-label">Live vehicles</span>
+                        <strong id="map-vehicle-count">12</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card map-insight-card">
+                <p class="eyebrow">Route monitor</p>
+                <h2>Running roads</h2>
+                <div id="route-pills" class="route-pills"></div>
+                <div id="map-legend" class="map-legend"></div>
+            </div>
+        </div>
+
+        <div id="cctv-section" class="section" style="display:none;">
+            <div class="card">
+                <h2>Live CCTV</h2>
+                <p style="color:red;">Live monitoring</p>
+                <video width="500" autoplay muted loop controls>
+                    <source src="videos/road1.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <div id="challan-section" class="section" style="display:none;">
+            <div class="card">
+                <h2>E-Challan System</h2>
+                <button type="button" class="btn" onclick="generateChallan()">Generate Challan</button>
+                <button type="button" class="btn" onclick="downloadChallanPDF()">Download PDF</button>
+                <div id="challan-box"></div>
+            </div>
+        </div>
+
+        <div id="alerts-section" class="section" style="display:none;">
+            <div class="card">
+                <h2>Alerts Panel</h2>
+                <div id="alerts-panel"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Emergency Control</h2>
+            <button type="button" class="btn emergency-btn" onclick="activateEmergency('Ambulance')">Ambulance</button>
+            <button type="button" class="btn emergency-btn" onclick="activateEmergency('Police')">Police</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="site_app.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Traffic System</title>
+    <meta name="description" content="Login page for the Smart Traffic Management System.">
+    <link rel="stylesheet" href="login.css">
+    <script>
+        if (window.location.protocol === "file:" || ["127.0.0.1", "localhost"].includes(window.location.hostname)) {
+            if (window.location.port !== "5000") {
+                window.location.replace("http://127.0.0.1:5000/login.html");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2 id="form-title">Login</h2>
+            <p id="backend-status" style="font-weight:bold; margin-bottom:12px; color:gray;">Checking backend...</p>
+
+            <div id="login-form">
+                <input type="text" id="login-user" placeholder="Username">
+                <input type="password" id="login-pass" placeholder="Password">
+                <button type="button" onclick="login()">Login</button>
+
+                <p onclick="showForgot()">Forgot Password?</p>
+                <p>Don't have account? <span onclick="showSignup()">Sign Up</span></p>
+                <p>Or <span onclick="showOtp()">Login with OTP</span></p>
+            </div>
+
+            <div id="signup-form" style="display:none;">
+                <input type="text" id="signup-user" placeholder="New Username">
+                <input type="password" id="signup-pass" placeholder="New Password">
+                <button type="button" onclick="signup()">Sign Up</button>
+
+                <p onclick="showLogin()">Back to Login</p>
+            </div>
+
+            <div id="forgot-form" style="display:none;">
+                <input type="text" placeholder="Enter Username">
+                <button type="button" onclick="resetPass()">Reset Password</button>
+
+                <p onclick="showLogin()">Back to Login</p>
+            </div>
+
+            <div id="otp-form" style="display:none;">
+                <input type="text" id="otp-user" placeholder="Username">
+                <button type="button" onclick="sendOtp()">Send OTP</button>
+                <input type="text" id="otp-code" placeholder="Enter OTP" style="margin-top: 10px; display: none;">
+                <button type="button" id="verify-otp-btn" onclick="verifyOtp()" style="margin-top: 10px; display: none;">Verify OTP</button>
+
+                <p onclick="showLogin()">Back to Login</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="site_login.js?v=1"></script>
+</body>
+</html>
